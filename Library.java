@@ -1,99 +1,77 @@
-/* This is a stub for the Library class */
-import java.util.Hashtable;
+/* This is a stub for the House class */
+import java.util.ArrayList;
 
 /**
- * Library is a subclass of Building that represents a library.
- * It stores a collection of books and tracks if they are checked out.
+ * House is a subclass of Building that represents a student house.
+ * It tracks residents and whether it has a dining room.
  */
-public class Library extends Building implements LibraryRequirements {
+public class House extends Building implements HouseRequirements {
 
-    private Hashtable<String, Boolean> collection;
+    private ArrayList<Student> residents;
+    private boolean hasDiningRoom;
 
     /**
-     * Creates a Library with the given details.
-     * @param name Name of the library
-     * @param address Address of the library
+     * Creates a House with the given details.
+     * @param name Name of the house
+     * @param address Address of the house
      * @param nFloors Number of floors
+     * @param hasDiningRoom true if the house has a dining room
      */
-    public Library(String name, String address, int nFloors) {
+    public House(String name, String address, int nFloors, boolean hasDiningRoom) {
         super(name, address, nFloors);
-        this.collection = new Hashtable<String, Boolean>();
-        System.out.println("You have built a library 📚");
+        this.hasDiningRoom = hasDiningRoom;
+        this.residents = new ArrayList<Student>();
+        System.out.println("You have built a house: 🏠");
     }
 
     /**
-     * Adds a book to the library collection.
-     * @param title the title of the book
+     * Returns true if the house has a dining room.
      */
-    public void addTitle(String title) {
-        collection.put(title, true);  // true = available
+    public boolean hasDiningRoom() {
+        return this.hasDiningRoom;
     }
 
     /**
-     * Removes a book from the collection.
-     * @param title the title to remove
-     * @return the title that was removed
+     * Returns the number of residents currently in the house.
      */
-    public String removeTitle(String title) {
-        collection.remove(title);
-        return title;
+    public int nResidents() {
+        return this.residents.size();
     }
 
     /**
-     * Checks out a book (marks it as not available).
-     * @param title the title to check out
+     * Adds a student to the house.
+     * @param s the Student to move in
      */
-    public void checkOut(String title) {
-        if (collection.containsKey(title)) {
-            collection.replace(title, false);
+    public void moveIn(Student s) {
+        this.residents.add(s);
+    }
+
+    /**
+     * Removes a student from the house.
+     * @param s the Student to move out
+     * @return the Student who moved out
+     */
+    public Student moveOut(Student s) {
+        if (this.residents.remove(s)) {
+            return s;
         }
+        return null; // if student was not found
     }
 
     /**
-     * Returns a book (marks it as available).
-     * @param title the title to return
+     * Checks if a student lives in the house.
+     * @param s the Student to check
+     * @return true if the student is a resident
      */
-    public void returnBook(String title) {
-        if (collection.containsKey(title)) {
-            collection.replace(title, true);
-        }
+    public boolean isResident(Student s) {
+        return this.residents.contains(s);
     }
 
     /**
-     * Checks if the library contains a certain title.
-     * @param title the title to search for
-     * @return true if found
-     */
-    public boolean containsTitle(String title) {
-        return collection.containsKey(title);
-    }
-
-    /**
-     * Checks if a book is currently available.
-     * @param title the title to check
-     * @return true if available, false if checked out
-     */
-    public boolean isAvailable(String title) {
-        return collection.getOrDefault(title, false);
-    }
-
-    /**
-     * Prints all books in the collection and their status.
-     */
-    public void printCollection() {
-        for (String title : collection.keySet()) {
-            String status = collection.get(title) ? "Available" : "Checked out";
-            System.out.println(title + " — " + status);
-        }
-    }
-
-    /**
-     * Main method to test creating a Library.
+     * Main method to test creating a House.
      */
     public static void main(String[] args) {
-        Library lib = new Library("Neilson Library", "7 Neilson Drive", 4);
-        lib.addTitle("The Lorax by Dr. Seuss");
-        lib.addTitle("Pride and Prejudice by Jane Austen");
-        lib.printCollection();
+        House tester = new House("King House", "10 Elm Street", 3, true);
+        System.out.println(tester);
     }
 }
